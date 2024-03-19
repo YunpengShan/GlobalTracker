@@ -244,6 +244,9 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Forget Password?">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="forgotPasswordButtonTapped:" destination="utg-pr-K27" eventType="touchUpInside" id="7qd-jd-Rmh"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ppt-Nb-TgZ">
                                 <rect key="frame" x="28" y="660" width="340" height="51"/>

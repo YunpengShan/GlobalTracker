@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
 
         override func viewDidLoad() {
             super.viewDidLoad()
-
+            navigationItem.hidesBackButton = true
             // Apply shadow attributes to text fields
             emailTextField.layer.shadowColor = UIColor.black.cgColor
             emailTextField.layer.shadowOpacity = 0.5
@@ -137,5 +137,39 @@ class LoginViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
+    // Action for "forgot password?" button
+        @IBAction func forgotPasswordButtonTapped(_ sender: UIButton) {
+            let alert = UIAlertController(title: "Reset Password", message: "Enter your email to reset your password", preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                textField.placeholder = "Email"
+            }
+            
+            let resetAction = UIAlertAction(title: "Reset", style: .default) { (_) in
+                guard let email = alert.textFields?.first?.text else { return }
+                
+                Auth.auth().sendPasswordReset(withEmail: email) { error in
+                    if let error = error {
+                        print("Error sending password reset email: \(error.localizedDescription)")
+                        // Show an alert indicating the failure to send the reset email
+                        let failureAlert = UIAlertController(title: "Error", message: "Failed to send password reset email. Please try again.", preferredStyle: .alert)
+                        failureAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(failureAlert, animated: true, completion: nil)
+                    } else {
+                        // Show an alert indicating that the reset email has been sent successfully
+                        let successAlert = UIAlertController(title: "Password Reset Email Sent", message: "A password reset email has been sent to your email address. Please check your inbox.", preferredStyle: .alert)
+                        successAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(successAlert, animated: true, completion: nil)
+                    }
+                }
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alert.addAction(resetAction)
+            alert.addAction(cancelAction)
+            
+            present(alert, animated: true, completion: nil)
+        }
 
 }
