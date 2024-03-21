@@ -10,6 +10,7 @@ import FirebaseAuth
 
 class SettingViewController: UIViewController {
 
+    @IBOutlet weak var viewContinentsButton: UIButton!
     @IBOutlet weak var clearVisitedButton: UIButton!
     @IBOutlet weak var clearWantButton: UIButton!
     @IBOutlet weak var logoutButton: UIButton!
@@ -17,6 +18,14 @@ class SettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Apply shadow attributes to buttons
+        viewContinentsButton.layer.shadowColor = UIColor.black.cgColor
+        viewContinentsButton.layer.shadowOpacity = 0.5
+        viewContinentsButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+        viewContinentsButton.layer.shadowRadius = 3
+        viewContinentsButton.frame.size.height = 51
+        viewContinentsButton.tintColor = UIColor(hex: "#577bc4")
+        
         // Apply shadow attributes to buttons
         clearVisitedButton.layer.shadowColor = UIColor.black.cgColor
         clearVisitedButton.layer.shadowOpacity = 0.5
@@ -40,6 +49,7 @@ class SettingViewController: UIViewController {
         logoutButton.layer.shadowRadius = 3
         logoutButton.frame.size.height = 51
         logoutButton.tintColor = UIColor(hex: "#577bc4")
+        
     }
     
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
