@@ -72,7 +72,7 @@
 		6595675A2BA9EAD2007515C3 /* VisitedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedViewController.swift; sourceTree = "<group>"; };
 		6595675C2BA9EAE5007515C3 /* VisitedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedListViewController.swift; sourceTree = "<group>"; };
 		6595675E2BA9EAF5007515C3 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
-		659567602BA9ECB3007515C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		659567602BA9ECB3007515C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "/Users/fepc-1014w/workspace/GlobalTracker/GlobalTracker/GlobalTracker/GoogleService-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,7 +422,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VDQS4882Z8;
+				DEVELOPMENT_TEAM = 6KJHJCKEPX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GlobalTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GlobalTracker;
@@ -451,7 +451,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VDQS4882Z8;
+				DEVELOPMENT_TEAM = 6KJHJCKEPX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GlobalTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = GlobalTracker;
