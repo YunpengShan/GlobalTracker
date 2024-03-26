@@ -1,0 +1,74 @@
+# Xcode
+##
+.DS_Store
+*.swp
+*.lock
+*.xcuserstate
+project.xcworkspace
+xcuserdata
+DerivedData/
+*.playground/
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+xcshareddata/
+*.gcno
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CocoaPods
+##
+Pods/
+/Podfile.lock
+/Podfile
+/Pods/
+
+# Carthage
+##
+Carthage/
+Carthage/Build
+
+# Swift Package Manager
+##
+.build/
+/.swiftpm/xcode/package.xcworkspace
+/.swiftpm/xcode/xcuserdata
+
+# Fastlane
+##
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/.env
+fastlane/.env.default
+
+# Ignore Mac files
+##
+.DS_Store
+
+# Ignore archived Universally Unique Identifiers
+##
+*.xcarchive
+
+# Ignore all log files
+##
+*.log
+
+# Others
+##
+.idea/
+*.generated.swift
+*.generated.swift.d
+*.stencil
+/swiftgen.yml
+/swiftgen-*.yml
+
+# Yarn
+##
+.yarn/
+.yarn-cache/
+node_modules/
