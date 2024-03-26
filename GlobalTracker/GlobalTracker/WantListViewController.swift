@@ -86,13 +86,31 @@ extension WantListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath)
-        
-        // Configure cell with country name
-        cell.textLabel?.text = countryNames[indexPath.row]
-        
-        return cell
-    }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath)
+            
+            // Configure cell with country name and flag
+            let countryName = countryNames[indexPath.row]
+            let flagEmoji: String
+            
+            // Assign flag emoji based on country name
+            switch countryName {
+            case "Canada":
+                flagEmoji = "🇨🇦"
+            case "China":
+                flagEmoji = "🇨🇳"
+            // Add cases for more countries as needed
+            default:
+                flagEmoji = "" // Default to empty string if no flag is available
+            }
+            
+            // Set cell text with country name and flag
+            cell.textLabel?.text = "\(flagEmoji) \(countryName)"
+            
+            // Increase font size
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 28) // Adjust the size as needed
+            
+            return cell
+        }
 }
 
 extension WantListViewController: UITableViewDelegate {
@@ -108,7 +126,7 @@ extension WantListViewController: UITableViewDelegate {
             let userCountryRef = db.collection("users").document(currentUserUID).collection("countries")
             
             // Find the document corresponding to the deleted country name
-            userCountryRef.whereField("countryName", isEqualTo: deletedCountryName).getDocuments { (snapshot, error) in
+            userCountryRef.whereField("wantCountryName", isEqualTo: deletedCountryName).getDocuments { (snapshot, error) in
                 if let error = error {
                     print("Error retrieving document for deletion: \(error)")
                 } else {

@@ -17,7 +17,7 @@ class WantViewController: UIViewController {
     let db = Firestore.firestore()
     
     // Array to store all country names
-    let allCountryNames = ["Country 1", "Country 2", "Country 3", "Country 4"] // Add more countries as needed
+    let allCountryNames = ["Canada", "China"] // Add more countries as needed
     
     // Array to store search results
     var searchResults: [String] = []
@@ -60,17 +60,17 @@ class WantViewController: UIViewController {
     }
     
     // Action for the Save button
-        @IBAction func saveButtonTapped(_ sender: UIButton) {
-            // Perform save operation here
-            // For demonstration, let's assume the first item in search results is selected
-            guard let selectedCountry = searchResults.first else {
-                // Show alert indicating no country selected
-                return
-            }
-            
-            // Save the selected country to Firestore
-            saveCountryToFirestore(selectedCountry)
+    @IBAction func saveButtonTapped(_ sender: UIButton) {
+        // Perform save operation here
+        // For demonstration, let's assume the first item in search results is selected
+        guard let selectedCountry = searchResults.first else {
+            // Show alert indicating no country selected
+            return
         }
+        
+        // Save the selected country to Firestore
+        saveCountryToFirestore(selectedCountry)
+    }
     
     // Function to save a country to Firestore
     func saveCountryToFirestore(_ wantCountryName: String) {
@@ -83,22 +83,47 @@ class WantViewController: UIViewController {
         // Construct the path using user's UID
         let userCountriesRef = db.collection("users").document(currentUserUID).collection("countries")
         
-        // Add the country to Firestore
-        userCountriesRef.addDocument(data: ["wantCountryName": wantCountryName]) { [weak self] error in
+        // Check if the country name already exists in Firestore
+        userCountriesRef.whereField("wantCountryName", isEqualTo: wantCountryName).getDocuments { [weak self] (snapshot, error) in
             guard let self = self else { return }
             
             if let error = error {
-                print("Error saving country to Firestore: \(error)")
+                print("Error checking if country exists: \(error)")
                 // Handle error if necessary
-            } else {
-                print("Country saved successfully to Firestore")
-                // Notify the delegate that a country is saved
-                self.delegate?.countrySaved()
+                return
+            }
+            
+            if let snapshot = snapshot, !snapshot.isEmpty {
+                // Country already exists in Firestore
+                print("Country already exists in Firestore")
                 
-                // Present an alert indicating successful save
-                let alert = UIAlertController(title: "Country Saved", message: "Your selected country has been saved successfully.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                // Show alert to the user
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Adding Country Failed ❌", message: "The Country Already Exists in your want list.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+
+            } else {
+                // Country does not exist, proceed with saving
+                // Add the country to Firestore
+                userCountriesRef.addDocument(data: ["wantCountryName": wantCountryName]) { error in
+                    if let error = error {
+                        print("Error saving country to Firestore: \(error)")
+                        // Handle error if necessary
+                    } else {
+                        print("Want Country saved successfully to Firestore")
+                        // Notify the delegate that a country is saved
+                        self.delegate?.countrySaved()
+                        
+                        // Present an alert indicating successful save
+                        // Present an alert indicating successful save
+                        let alert = UIAlertController(title: "✅", message: "Want Country Saved", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+
+                    }
+                }
             }
         }
     }
@@ -113,7 +138,26 @@ extension WantViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath)
-        cell.textLabel?.text = displayedData[indexPath.row]
+        let countryName = displayedData[indexPath.row]
+        
+        // Get the emoji flag corresponding to the country name
+        let flagEmoji: String
+        switch countryName {
+        case "Canada":
+            flagEmoji = "🇨🇦"
+        case "China":
+            flagEmoji = "🇨🇳"
+        // Add cases for more countries as needed
+        default:
+            flagEmoji = "" // Default to empty string if no flag is available
+        }
+        
+        // Configure cell with country name and flag
+        cell.textLabel?.text = "\(flagEmoji) \(countryName)"
+        
+        // Increase font size
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 28) // Adjust the size as needed
+        
         return cell
     }
 }
