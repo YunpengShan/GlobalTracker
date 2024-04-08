@@ -7,48 +7,36 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class SettingViewController: UIViewController {
 
     @IBOutlet weak var viewContinentsButton: UIButton!
     @IBOutlet weak var clearVisitedButton: UIButton!
     @IBOutlet weak var clearWantButton: UIButton!
+    @IBOutlet weak var privacyButton: UIButton!
+    @IBOutlet weak var termsButton: UIButton!
     @IBOutlet weak var logoutButton: UIButton!
+    
+    let db = Firestore.firestore()
+    
+    @IBAction func clearVisitedButtonTapped(_ sender: UIButton) {
+        clearVisitedCountries()
+    }
+
+    @IBAction func clearWantButtonTapped(_ sender: UIButton) {
+        clearWantCountries()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Apply shadow attributes to buttons
-        viewContinentsButton.layer.shadowColor = UIColor.black.cgColor
-        viewContinentsButton.layer.shadowOpacity = 0.5
-        viewContinentsButton.layer.shadowOffset = CGSize(width: 0, height: 2)
-        viewContinentsButton.layer.shadowRadius = 3
-        viewContinentsButton.frame.size.height = 51
-        viewContinentsButton.tintColor = UIColor(hex: "#577bc4")
-        
-        // Apply shadow attributes to buttons
-        clearVisitedButton.layer.shadowColor = UIColor.black.cgColor
-        clearVisitedButton.layer.shadowOpacity = 0.5
-        clearVisitedButton.layer.shadowOffset = CGSize(width: 0, height: 2)
-        clearVisitedButton.layer.shadowRadius = 3
-        clearVisitedButton.frame.size.height = 51
-        clearVisitedButton.tintColor = UIColor(hex: "#577bc4")
-        
-        // Apply shadow attributes to buttons
-        clearWantButton.layer.shadowColor = UIColor.black.cgColor
-        clearWantButton.layer.shadowOpacity = 0.5
-        clearWantButton.layer.shadowOffset = CGSize(width: 0, height: 2)
-        clearWantButton.layer.shadowRadius = 3
-        clearWantButton.frame.size.height = 51
-        clearWantButton.tintColor = UIColor(hex: "#577bc4")
-        
-        // Apply shadow attributes to buttons
-        logoutButton.layer.shadowColor = UIColor.black.cgColor
-        logoutButton.layer.shadowOpacity = 0.5
-        logoutButton.layer.shadowOffset = CGSize(width: 0, height: 2)
-        logoutButton.layer.shadowRadius = 3
-        logoutButton.frame.size.height = 51
-        logoutButton.tintColor = UIColor(hex: "#577bc4")
+        styleButton(viewContinentsButton)
+        styleButton(clearVisitedButton)
+        styleButton(clearWantButton)
+        styleButton(privacyButton)
+        styleButton(termsButton)
+        styleButton(logoutButton)
         
     }
     
@@ -76,4 +64,67 @@ class SettingViewController: UIViewController {
             }
         }
     }
+    
+    private func clearVisitedCountries() {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+
+        let userCountriesRef = db.collection("users").document(currentUserUID).collection("countries")
+
+        // Retrieve all documents that have a 'visitedCountryName' field and delete them
+        userCountriesRef.whereField("visitedCountryName", isNotEqualTo: "").getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting visited countries documents: \(error)")
+            } else {
+                for document in snapshot!.documents {
+                    document.reference.delete { error in
+                        if let error = error {
+                            print("Error removing visited country: \(error)")
+                        } else {
+                            print("Visited country successfully removed!")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func clearWantCountries() {
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+
+        let wantCountriesRef = db.collection("users").document(currentUserUID).collection("countries")
+
+        // Retrieve all documents that have a 'wantCountryName' field and delete them
+        wantCountriesRef.whereField("wantCountryName", isNotEqualTo: "").getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting want countries documents: \(error)")
+            } else {
+                for document in snapshot!.documents {
+                    document.reference.delete { error in
+                        if let error = error {
+                            print("Error removing want country: \(error)")
+                        } else {
+                            print("Want country successfully removed!")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Function to apply common styling to buttons
+    private func styleButton(_ button: UIButton) {
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 3
+        button.frame.size.height = 51
+        button.tintColor = UIColor(hex: "#577bc4")
+    }
+
 }

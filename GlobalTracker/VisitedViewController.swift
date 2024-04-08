@@ -24,7 +24,7 @@ class VisitedViewController: UIViewController {
     let db = Firestore.firestore()
     
     // Array to store all country names
-    let allCountryNames = ["China", "Country 2", "Country 3", "Country 4"] // Add more countries as needed
+    let allCountryNames = CountryNameProvider.getAllCountryNames()
     
     // Array to store search results
     var searchResults: [String] = []
@@ -106,7 +106,9 @@ class VisitedViewController: UIViewController {
                 
                 // Show alert to the user
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Adding Country Failed ❌", message: "The Country Already Exists in your want list.", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Duplicate Country",
+                                                  message: "This country is already on your visited list.",
+                                                  preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -124,7 +126,9 @@ class VisitedViewController: UIViewController {
                         self.delegate?.countrySaved()
                         
                         // Present an alert indicating successful save
-                        let alert = UIAlertController(title: "Visited Country Saved ✅", message: "Your selected country has been saved successfully.", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Country Saved",
+                                                      message: "The country has been added to your visited list!",
+                                                      preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
@@ -145,20 +149,10 @@ extension VisitedViewController: UITableViewDataSource {
         let countryName = displayedData[indexPath.row]
         
         // Get the emoji flag corresponding to the country name
-        let flagEmoji: String
-        switch countryName {
-        case "Canada":
-            flagEmoji = "🇨🇦"
-        case "China":
-            flagEmoji = "🇨🇳"
-            // Add cases for more countries as needed
-        default:
-            flagEmoji = "" // Default to empty string if no flag is available
-        }
+        let flagEmoji = CountryFlagProvider.getFlagEmoji(for: countryName)
         
         // Configure cell with country name and flag
         cell.textLabel?.text = "\(flagEmoji) \(countryName)"
-        
         
         // Increase font size
         cell.textLabel?.font = UIFont.systemFont(ofSize: 28) // Adjust the size as needed

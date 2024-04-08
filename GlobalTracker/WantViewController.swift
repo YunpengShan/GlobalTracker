@@ -17,7 +17,7 @@ class WantViewController: UIViewController {
     let db = Firestore.firestore()
     
     // Array to store all country names
-    let allCountryNames = ["Canada", "China"] // Add more countries as needed
+    let allCountryNames = CountryNameProvider.getAllCountryNames()
     
     // Array to store search results
     var searchResults: [String] = []
@@ -99,7 +99,9 @@ class WantViewController: UIViewController {
                 
                 // Show alert to the user
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Adding Country Failed ❌", message: "The Country Already Exists in your want list.", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Duplicate Country",
+                                                  message: "This country is already on your want list.",
+                                                  preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -118,7 +120,9 @@ class WantViewController: UIViewController {
                         
                         // Present an alert indicating successful save
                         // Present an alert indicating successful save
-                        let alert = UIAlertController(title: "✅", message: "Want Country Saved", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Country Saved",
+                                                      message: "The country has been added to your want list!",
+                                                      preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
 
@@ -141,16 +145,7 @@ extension WantViewController: UITableViewDataSource {
         let countryName = displayedData[indexPath.row]
         
         // Get the emoji flag corresponding to the country name
-        let flagEmoji: String
-        switch countryName {
-        case "Canada":
-            flagEmoji = "🇨🇦"
-        case "China":
-            flagEmoji = "🇨🇳"
-        // Add cases for more countries as needed
-        default:
-            flagEmoji = "" // Default to empty string if no flag is available
-        }
+        let flagEmoji = CountryFlagProvider.getFlagEmoji(for: countryName)
         
         // Configure cell with country name and flag
         cell.textLabel?.text = "\(flagEmoji) \(countryName)"
@@ -160,6 +155,7 @@ extension WantViewController: UITableViewDataSource {
         
         return cell
     }
+
 }
 
 // MARK: - UISearchBarDelegate
